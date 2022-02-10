@@ -15,11 +15,18 @@ const PromptSchema = new Schema(
       ref: "User",
       required: true,
     },
-    storyline: [{
-      type: Schema.Types.ObjectId,
-      ref: "Storyline",
+    storyline: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Storyline",
+        required: true,
+      },
+    ],
+    status: {
+      type: String,
       required: true,
-    }],
+      default: "ongoing",
+    },
   },
   {
     timestamps: true,

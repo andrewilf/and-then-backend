@@ -7,13 +7,13 @@ const router = express.Router();
 
 router.get("/all/:pageNumber", async (req, res) => {
     console.log("get all users");
-    const page = req.params.pageNumber
+    const page = parseInt(req.params.pageNumber, 10) || 1
     const options = {
       page: page,
       limit: 9,
     }
     const userAll = await User.paginate({}, options);
-    //returns all users, should be an array of objects
+    //returns all users, in a paginated return payload, more for testing
     res.send(userAll);
   });
 

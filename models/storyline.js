@@ -14,11 +14,6 @@ const StorylineSchema = new Schema(
         ref: "StoryNode",
       },
     ],
-    status: {
-        type: String,
-        required: true,
-        default: "ongoing"
-    }
   },
   {
     timestamps: true,
