@@ -31,21 +31,11 @@ app.use(
 
 //--------------------------------------------controllers--------------------------------------------
 
-// const patientController = require("./controllers/patientController");
-// const doctorController = require("./controllers/doctorController");
-// const scheduledAppointmentController = require("./controllers/schAppController");
-// const pastAppointmentController = require("./controllers/pastAppController");
-// const userController = require("./controllers/userController");
-// const accountController = require("./controllers/accountController");
-// const sessionController = require("./controllers/sessionController");
 
-// app.use("/patient", patientController);
-// app.use("/doctor", doctorController);
-// app.use("/schapp", scheduledAppointmentController);
-// app.use("/pastapp", pastAppointmentController);
-// app.use("/user", userController);
-// app.use("/account", accountController);
-// app.use("/session", sessionController);
+const userController = require("./controllers/userController");
+
+app.use("/user", userController);
+
 
 mongoose.connect(MONGO_URL).then(async () => {
   console.log("database connected");
