@@ -20,16 +20,29 @@ const UserSchema = new Schema(
     role: {
       type: String,
       required: true,
+      default: "basic",
     },
-    // patientID: {
-    //   //made two seperate IDs as I currently am unsure if the ref can be made flexible
-    //   type: Schema.Types.ObjectId,
-    //   ref: "Patient",
-    // },
-    // DoctorID: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "Doctor",
-    // },
+    followedPrompts: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Prompt",
+      },
+    ],
+    ownedPrompts: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Prompt",
+      },
+    ],
+    ownedNodes: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Node",
+      },
+    ],
+    img: {
+      type: String,
+    },
   },
   {
     timestamps: true,
