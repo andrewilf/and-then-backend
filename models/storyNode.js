@@ -12,6 +12,10 @@ const StoryNodeSchema = new Schema(
       ref: "User",
       required: true,
     },
+    PromptAttached: {
+      type: Schema.Types.ObjectId,
+      ref: "Prompt",
+    },
   },
   {
     timestamps: true,

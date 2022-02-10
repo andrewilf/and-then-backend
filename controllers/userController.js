@@ -5,7 +5,19 @@ const router = express.Router();
 
 ///GET routes==================================================================================================
 
-router.get("/all", async (req, res) => {
+router.get("/all/:pageNumber", async (req, res) => {
+    console.log("get all users");
+    const page = req.params.pageNumber
+    const options = {
+      page: page,
+      limit: 9,
+    }
+    const userAll = await User.paginate({}, options);
+    //returns all users, should be an array of objects
+    res.send(userAll);
+  });
+
+  router.get("/all", async (req, res) => {
     console.log("get all users");
     const userAll = await User.find({});
     //returns all users, should be an array of objects
@@ -98,7 +110,6 @@ router.get("/all", async (req, res) => {
       email: "aaa@aaa.com",
       password: "asdasd1",
       username: "usetTest1",
-      role: "user"
     };
     try {
       const userCreate = await User.create(sampleData);
