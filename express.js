@@ -33,9 +33,10 @@ app.use(
 
 
 const userController = require("./controllers/userController");
+const bannerController = require("./controllers/bannerImageController");
 
 app.use("/user", userController);
-
+app.use("/banner", bannerController);
 
 mongoose.connect(MONGO_URL).then(async () => {
   console.log("database connected");

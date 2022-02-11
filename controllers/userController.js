@@ -145,8 +145,6 @@ router.get("/all/:pageNumber", async (req, res) => {
     }
   });
   
-  //maybe have an upsert put? Potentially could also have a mass update path if needed, searches by one field, updates according to req.body
-  
   //DELETE routes===============================================================================================
   
   router.delete("/all", async (req, res) => {
@@ -182,8 +180,5 @@ router.get("/all/:pageNumber", async (req, res) => {
       res.status(400).send("error when deleting user, bad input");
     }
   });
-  
-
-//need to make unique routes which interact with the User and Patient collection for creating and deleting users
 
 module.exports = router;
