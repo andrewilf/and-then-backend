@@ -5,7 +5,6 @@ const app = express();
 const mongoose = require("mongoose");
 //const session = require("express-session");
 //const CORS_WHITELIST = process.env.CORS_WHITELIST.split(",");
-
 const db = mongoose.connection;
 const PORT = process.env.PORT;
 const DATABASE = process.env.DATABASE;
@@ -34,9 +33,11 @@ app.use(
 
 const userController = require("./controllers/userController");
 const bannerController = require("./controllers/bannerImageController");
+const sessionController = require("./controllers/sessionController")
 
 app.use("/user", userController);
 app.use("/banner", bannerController);
+app.use("/session", sessionController);
 
 mongoose.connect(MONGO_URL).then(async () => {
   console.log("database connected");

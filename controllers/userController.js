@@ -2,6 +2,7 @@ const express = require("express");
 require("dotenv").config();
 const User = require("../models/user");
 const router = express.Router();
+const bcrypt= require('bcryptjs')
 
 ///GET routes==================================================================================================
 
@@ -96,6 +97,7 @@ router.get("/all/:pageNumber", async (req, res) => {
   router.post("/", async (req, res) => {
     try {
       //create one user
+      req.body.password =await bcrypt.hash(req.body.password,10)
       const userCreate = await User.create(req.body);
       res.send(userCreate);
     } catch (error) {
@@ -106,6 +108,7 @@ router.get("/all/:pageNumber", async (req, res) => {
   
   router.post("/sample", async (req, res) => {
     //create a sample user
+    //req.body.password =await bcrypt.hash(req.body.password,10)
     const sampleData = {
       email: "aaa@aaa.com",
       password: "asdasd1",
