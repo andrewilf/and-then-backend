@@ -25,24 +25,6 @@ router.get("/all/:pageNumber", async (req, res) => {
     res.send(userAll);
   });
   
-  router.get("/", async (req, res) => {
-    //search multiple users by body
-    try {
-      console.log(`search by req.body object`);
-      const usersGet = await User.find(req.body);
-      if (usersGet.length !== 0) {
-        //return valid response, should be an array of objects
-        res.send(usersGet);
-      } else {
-        //No user was found
-        res.status(404).send(`no users were found`);
-      }
-    } catch (error) {
-      console.error(error);
-      res.status(500).send("error when finding user");
-    }
-  });
-  
   router.get("/:userID", async (req, res) => {
     //searc for one user by _id
     try {
@@ -68,7 +50,7 @@ router.get("/all/:pageNumber", async (req, res) => {
     try {
       const searchField = req.params.searchField;
       const searchValue = req.params.searchValue;
-      console.log(`search by field: ${searchField}`);
+      console.log(`search users by field: ${searchField}`);
       const checkFieldExists = Object.keys(User.schema.tree).find(
         //checks if the searchField is a valid field for the model
         (element) => element === searchField
