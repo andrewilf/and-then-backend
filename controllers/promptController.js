@@ -33,6 +33,7 @@ router.get("/search", async (req, res) => {
     if (title) {
       searchObj.push({ title: { $regex: title, $options: "i" } });
     }
+    console.log(searchObj)
     const searchPrompts = await Prompt.find({ $and: searchObj });
     res.send(searchPrompts);
   } catch (error) {
