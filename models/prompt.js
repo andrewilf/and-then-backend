@@ -39,6 +39,10 @@ const PromptSchema = new Schema(
       type: String,
       required: true,
     },
+    bannerURL: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,
