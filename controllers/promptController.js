@@ -12,13 +12,18 @@ router.get("/all", async (req, res) => {
   res.send(promptAll);
 });
 
-router.get("/search", async (req, res) => {
+router.get("/search/:page", async (req, res) => {
   //search for prompt by search fields
   try {
     const genre = req.query.genre || null;
     const rating = req.query.rating || null;
     const status = req.query.status || null;
     const title = req.query.title || null;
+    const page = req.params.page || 1;
+    const options = {
+      page: page,
+      limit: 9,
+    };
     console.log("search for prompts with fields");
     const searchObj = [];
     if (genre) {
@@ -34,8 +39,9 @@ router.get("/search", async (req, res) => {
       searchObj.push({ title: { $regex: title, $options: "i" } });
     }
     console.log(searchObj);
-    const searchPrompts = await Prompt.find(
-      searchObj.length === 0 ? {} : { $and: searchObj }
+    const searchPrompts = await Prompt.paginate(
+      searchObj.length === 0 ? {} : { $and: searchObj },
+      options
     );
     console.log("number: ", searchPrompts.length);
     res.send(searchPrompts);
