@@ -29,7 +29,7 @@ const PromptSchema = new Schema(
     status: {
       type: String,
       required: true,
-      default: "ongoing",
+      default: "Ongoing",
     },
     rating: {
       type: String,
