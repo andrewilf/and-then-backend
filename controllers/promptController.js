@@ -20,20 +20,20 @@ router.get("/search", async (req, res) => {
     const status = req.query.status || null;
     const title = req.query.title || null;
     console.log("search for prompts with fields");
-    const searchObj = {};
+    const searchObj = [];
     if (genre) {
-      searchObj.genre = { $in: genre.split(",") };
+      searchObj.push({ genre: { $in: genre.split(",") } });
     }
     if (rating) {
-      searchObj.rating = { $in: rating.split(",") };
+      searchObj.push({ rating: { $in: rating.split(",") } });
     }
     if (status) {
-      searchObj.status = { $in: status.split(",") };
+      searchObj.push({ status: { $in: status.split(",") } });
     }
     if (title) {
-      searchObj.title = { $regex: title, $options: "i" };
+      searchObj.push({ title: { $regex: title, $options: "i" } });
     }
-    const searchPrompts = await Prompt.find(searchObj);
+    const searchPrompts = await Prompt.find({ $and: searchObj });
     res.send(searchPrompts);
   } catch (error) {
     console.error(error);
