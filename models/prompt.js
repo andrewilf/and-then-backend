@@ -31,6 +31,10 @@ const PromptSchema = new Schema(
       required: true,
       default: "ongoing",
     },
+    rating: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,

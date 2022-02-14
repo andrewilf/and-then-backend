@@ -84,6 +84,7 @@ router.post("/sample", async (req, res) => {
     additionalInfo: "asdasdasd",
     owner: "62075a212c3cd68e34ad35f2",
     storyline: ["62075a212c3cd68e34ad35f2", "62075a212c3cd68e34ad35f2"],
+    rating: "everyone"
   };
   try {
     const promptCreate = await Prompt.create(sampleData);
