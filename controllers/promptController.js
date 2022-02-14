@@ -12,8 +12,37 @@ router.get("/all", async (req, res) => {
   res.send(promptAll);
 });
 
+router.get("/search", async (req, res) => {
+  //search for prompt by search fields
+  try {
+    const genre = req.query.genre || null;
+    const rating = req.query.rating || null;
+    const status = req.query.status || null;
+    const title = req.query.title || null;
+    console.log("search for prompts with fields");
+    const searchObj = {};
+    if (genre) {
+      searchObj.genre = genre.split(",");
+    }
+    if (rating) {
+      searchObj.rating = rating.split(",");
+    }
+    if (status) {
+      searchObj.status = status.split(",");
+    }
+    if (title) {
+      searchObj.title = { $regex: title, $options: "i" };
+    }
+    const searchPrompts = await Prompt.find(searchObj);
+    res.send(searchPrompts);
+  } catch (error) {
+    console.error(error);
+    res.status(400).send("error when finding prompts, bad input");
+  }
+});
+
 router.get("/:promptID", async (req, res) => {
-  //searc for one prompt by _id
+  //search for one prompt by _id
   try {
     const promptID = req.params.promptID;
     console.log("search for prompt by _id");
@@ -85,7 +114,7 @@ router.post("/sample", async (req, res) => {
     owner: "62075a212c3cd68e34ad35f2",
     storyline: ["62075a212c3cd68e34ad35f2", "62075a212c3cd68e34ad35f2"],
     rating: "Everyone",
-    genre: "Thriller"
+    genre: "Thriller",
   };
   try {
     const promptCreate = await Prompt.create(sampleData);
@@ -130,9 +159,7 @@ router.delete("/all", async (req, res) => {
     if (promptsDelete.deletedCount !== 0) {
       res.send(promptsDelete);
     } else {
-      res
-        .status(404)
-        .send("No prompts were found in the db, deletedCount: 0");
+      res.status(404).send("No prompts were found in the db, deletedCount: 0");
     }
   } catch (error) {
     console.error(error);
