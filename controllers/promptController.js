@@ -22,13 +22,13 @@ router.get("/search", async (req, res) => {
     console.log("search for prompts with fields");
     const searchObj = {};
     if (genre) {
-      searchObj.genre = genre.split(",");
+      searchObj.genre = { $in: genre.split(",") };
     }
     if (rating) {
-      searchObj.rating = rating.split(",");
+      searchObj.rating = { $in: rating.split(",") };
     }
     if (status) {
-      searchObj.status = status.split(",");
+      searchObj.status = { $in: status.split(",") };
     }
     if (title) {
       searchObj.title = { $regex: title, $options: "i" };
@@ -115,7 +115,8 @@ router.post("/sample", async (req, res) => {
     storyline: ["62075a212c3cd68e34ad35f2", "62075a212c3cd68e34ad35f2"],
     rating: "Everyone",
     genre: "Thriller",
-    bannerURL: "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80"
+    bannerURL:
+      "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80",
   };
   try {
     const promptCreate = await Prompt.create(sampleData);
