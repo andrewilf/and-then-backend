@@ -42,7 +42,7 @@ router.get("/search/:page", async (req, res) => {
     const searchPrompts = await Prompt.paginate(
       searchObj.length === 0 ? {} : { $and: searchObj },
       options
-    );
+    )//.populate("storyline");
     console.log("number: ", searchPrompts.length);
     res.send(searchPrompts);
   } catch (error) {

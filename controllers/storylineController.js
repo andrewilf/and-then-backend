@@ -81,6 +81,7 @@ router.post("/sample", async (req, res) => {
   const sampleData = {
     prompt: "62075a212c3cd68e34ad35f2",
     storyNodes: ["62075a212c3cd68e34ad35f2", "62075a212c3cd68e34ad35f2"],
+    followers: ["62075a212c3cd68e34ad35f2", "62075a212c3cd68e34ad35f2"],
   };
   try {
     const storylineCreate = await Storyline.create(sampleData);

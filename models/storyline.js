@@ -14,6 +14,12 @@ const StorylineSchema = new Schema(
         ref: "StoryNode",
       },
     ],
+    followers: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   {
     timestamps: true,
