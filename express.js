@@ -33,11 +33,17 @@ app.use(
 
 const userController = require("./controllers/userController");
 const bannerController = require("./controllers/bannerImageController");
-const sessionController = require("./controllers/sessionController")
+const sessionController = require("./controllers/sessionController");
+const promptController = require("./controllers/promptController");
+const storylineController = require("./controllers/storylineController");
+const storyNodeController = require("./controllers/storyNodeController");
 
 app.use("/user", userController);
 app.use("/banner", bannerController);
 app.use("/session", sessionController);
+app.use("/prompt", promptController);
+app.use("/storyline", storylineController);
+app.use("/node", storyNodeController);
 
 mongoose.connect(MONGO_URL).then(async () => {
   console.log("database connected");
