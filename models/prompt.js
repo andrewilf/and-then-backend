@@ -3,6 +3,10 @@ const Schema = mongoose.Schema;
 
 const PromptSchema = new Schema(
   {
+    title: {
+      type: String,
+      required: true,
+    },
     promptText: {
       type: String,
       required: true,

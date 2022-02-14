@@ -79,6 +79,7 @@ router.post("/", async (req, res) => {
 router.post("/sample", async (req, res) => {
   //create a sample prompt
   const sampleData = {
+    title: "letter runner",
     promptText: "asdasdasd",
     additionalInfo: "asdasdasd",
     owner: "62075a212c3cd68e34ad35f2",
