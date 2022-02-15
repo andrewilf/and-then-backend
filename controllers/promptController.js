@@ -1,6 +1,7 @@
 const express = require("express");
 require("dotenv").config();
 const Prompt = require("../models/prompt");
+const User = require("../models/user")
 const Storyline = require("../models/storyline");
 const router = express.Router();
 
@@ -58,12 +59,10 @@ router.get("/:promptID", async (req, res) => {
   try {
     const promptID = req.params.promptID;
     console.log("search for prompt by _id");
-    const promptGetOne = await Prompt.findOne({ _id: promptID }).populate(
-      "storyline"
-    );
+    const promptGetOne = await Prompt.findOne({ _id: promptID }).populate("storyline");
     if (promptGetOne !== null) {
       try {
-        const userGetOne = await Prompt.findOne({ _id: promptGetOne.owner });
+        const userGetOne = await User.findOne({ _id: promptGetOne.owner });
         promptGetOne.username = userGetOne.username;
         res.send(promptGetOne);
       } catch {
