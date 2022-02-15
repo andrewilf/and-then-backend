@@ -58,7 +58,7 @@ router.get("/:promptID", async (req, res) => {
   try {
     const promptID = req.params.promptID;
     console.log("search for prompt by _id");
-    const promptGetOne = await Prompt.findOne({ _id: promptID });
+    const promptGetOne = await Prompt.findOne({ _id: promptID }).populate("storyline");
     if (promptGetOne !== null) {
       //returns one object
       res.send(promptGetOne);
