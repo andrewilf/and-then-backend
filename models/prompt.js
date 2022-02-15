@@ -22,8 +22,7 @@ const PromptSchema = new Schema(
     storyline: [
       {
         type: Schema.Types.ObjectId,
-        ref: "Storyline",
-        required: true,
+        ref: "Storyline"
       },
     ],
     status: {

@@ -119,14 +119,15 @@ router.post("/", async (req, res) => {
 router.post("/withstoryline", async (req, res) => {
   try {
     //create one prompt
-    const storylineCreate = await Storyline.create();
-    req.body.storyline = [storylineCreate._id];
-    const promptCreate = await Prompt.create(req.body);
-    await Storyline.updateOne(
-      { _id: storylineCreate._id },
-      { prompt: promptCreate._id }
-    );
-    res.send(promptCreate);
+    const storylineCreate = await Storyline.create(req.body);
+    console.log(storylineCreate)
+    // req.body.storyline = storylineCreate._id;
+   // const promptCreate = await Prompt.create(req.body);
+    // await Storyline.updateOne(
+    //   { _id: storylineCreate._id },
+    //   { prompt: promptCreate._id }
+    // );
+    res.send(storylineCreate);
   } catch (error) {
     console.error(error);
     res.status(400).send("error when adding prompt with storyline, bad input");

@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const StorylineSchema = new Schema(
   {
-    prompt: {
+    promptAttached: {
       type: Schema.Types.ObjectId,
       ref: "Prompt",
     },
@@ -19,6 +19,11 @@ const StorylineSchema = new Schema(
         ref: "User",
       },
     ],
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      
+    },
   },
   {
     timestamps: true,
