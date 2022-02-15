@@ -22,7 +22,13 @@ const PromptSchema = new Schema(
     storyline: [
       {
         type: Schema.Types.ObjectId,
-        ref: "Storyline"
+        ref: "Storyline",
+      },
+    ],
+    followers: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
       },
     ],
     status: {
