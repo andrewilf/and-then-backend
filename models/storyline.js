@@ -23,6 +23,12 @@ const StorylineSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
+    proposedNodes: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "StoryNode",
+      },
+    ],
   },
   {
     timestamps: true,
