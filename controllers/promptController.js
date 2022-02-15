@@ -63,6 +63,7 @@ router.get("/:promptID", async (req, res) => {
     if (promptGetOne !== null) {
       try {
         const userGetOne = await User.findOne({ _id: promptGetOne.owner });
+        const getNodes = await User.findOne({ _id: promptGetOne.owner });
         const payload = {promptGetOne}
         payload.username = userGetOne.username;
         res.send(payload);

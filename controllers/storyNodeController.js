@@ -12,6 +12,34 @@ router.get("/all", async (req, res) => {
   res.send(nodeAll);
 });
 
+router.get("/multi/:nodeArrayIDs", async (req, res) => {
+  //searc for one node by _id
+  try {
+    const nodeArrayIDs = req.params.nodeArrayIDs.split(",");
+    console.log("search for multiple nodes by _id");
+    const nodeGetMany = await StoryNode.find({
+      _id: { $in: nodeArrayIDs },
+    }).populate("author");
+    if (nodeGetMany !== null) {
+      //console.log(nodeGetMany)
+      const payload = nodeGetMany.map((element) => ({
+        _id: element._id,
+        text: element.text,
+        author: element.author.username,
+        updatedAt: element.updatedAt,
+      }));
+      res.send(payload);
+    } else {
+      //_id was of the correct format but no node was found
+      res.status(404).send("story node not found");
+    }
+  } catch (error) {
+    //likely the nodeID was not a string of 12 bytes or a string of 24 hex characters
+    console.error(error);
+    res.status(400).send("error when finding story node, bad input");
+  }
+});
+
 router.get("/:nodeID", async (req, res) => {
   //searc for one node by _id
   try {
