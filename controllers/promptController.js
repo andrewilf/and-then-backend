@@ -63,8 +63,9 @@ router.get("/:promptID", async (req, res) => {
     if (promptGetOne !== null) {
       try {
         const userGetOne = await User.findOne({ _id: promptGetOne.owner });
-        promptGetOne.username = userGetOne.username;
-        res.send(promptGetOne);
+        const payload = {promptGetOne}
+        payload.username = userGetOne.username;
+        res.send(payload);
       } catch {
         console.log("cannot find owner of prompt");
         res.status(500).send("error when finding prompt, db error");
