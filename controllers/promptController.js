@@ -43,7 +43,7 @@ router.get("/search/:page", async (req, res) => {
     const searchPrompts = await Prompt.paginate(
       searchObj.length === 0 ? {} : { $and: searchObj },
       options
-    ); //.populate("storyline");
+    ).populate("storyline");
     console.log("number: ", searchPrompts.length);
     res.send(searchPrompts);
   } catch (error) {
@@ -119,7 +119,7 @@ router.post("/", async (req, res) => {
 router.post("/withstoryline", async (req, res) => {
   try {
     //create one prompt
-    const storylineCreate = await Storyline.create(req.body);
+    const storylineCreate = await Storyline.create({owner: req.body.owner});
     console.log(storylineCreate)
     req.body.storyline = storylineCreate._id;
    const promptCreate = await Prompt.create(req.body);
@@ -134,27 +134,27 @@ router.post("/withstoryline", async (req, res) => {
   }
 });
 
-router.post("/sample", async (req, res) => {
-  //create a sample prompt
-  const sampleData = {
-    title: "letter runner",
-    promptText: "asdasdasd",
-    additionalInfo: "asdasdasd",
-    owner: "62075a212c3cd68e34ad35f2",
-    storyline: ["62075a212c3cd68e34ad35f2", "62075a212c3cd68e34ad35f2"],
-    rating: "Everyone",
-    genre: "Thriller",
-    bannerURL:
-      "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80",
-  };
-  try {
-    const promptCreate = await Prompt.create(sampleData);
-    res.send(promptCreate);
-  } catch (error) {
-    console.error(error);
-    res.status(400).send("error when adding prompt, bad input");
-  }
-});
+// router.post("/sample", async (req, res) => {
+//   //create a sample prompt
+//   const sampleData = {
+//     title: "letter runner",
+//     promptText: "asdasdasd",
+//     additionalInfo: "asdasdasd",
+//     owner: "62075a212c3cd68e34ad35f2",
+//     storyline: ["62075a212c3cd68e34ad35f2", "62075a212c3cd68e34ad35f2"],
+//     rating: "Everyone",
+//     genre: "Thriller",
+//     bannerURL:
+//       "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80",
+//   };
+//   try {
+//     const promptCreate = await Prompt.create(sampleData);
+//     res.send(promptCreate);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(400).send("error when adding prompt, bad input");
+//   }
+// });
 
 //PUT routes==================================================================================================
 
