@@ -27,6 +27,12 @@ router.get("/check", verifyJWT, async (req, res) => {
   res.send("you are authenticated");
 });
 
+router.get("/login", verifyJWT, async (req, res) => {
+  const token = req.headers["x-access-token"];
+  const decoded = jwt.decode(token);
+  res.send(decoded);
+});
+
 //POST routes=================================================================================================
 
 router.post("/", async (req, res) => {
@@ -45,6 +51,8 @@ router.post("/", async (req, res) => {
       console.log("login successful, creating token");
       const payload = {
         _id: userAccountSearch._id,
+        role: userAccountSearch.role,
+        username: userAccountSearch.username,
       };
       const token = jwt.sign(payload, process.env.SECRET, {
         expiresIn: "50m",
