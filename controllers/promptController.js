@@ -44,7 +44,7 @@ router.get("/search/:page", async (req, res) => {
     const searchPrompts = await Prompt.paginate(
       searchObj.length === 0 ? {} : { $and: searchObj },
       options
-    );//.populate("storyline")
+    ); //.populate("storyline")
     console.log("number: ", searchPrompts.length);
     res.send(searchPrompts);
   } catch (error) {
@@ -58,10 +58,18 @@ router.get("/:promptID", async (req, res) => {
   try {
     const promptID = req.params.promptID;
     console.log("search for prompt by _id");
-    const promptGetOne = await Prompt.findOne({ _id: promptID }).populate("storyline").populate("owner");
+    const promptGetOne = await Prompt.findOne({ _id: promptID }).populate(
+      "storyline"
+    );
     if (promptGetOne !== null) {
-      //returns one object
-      res.send(promptGetOne);
+      try {
+        const userGetOne = await Prompt.findOne({ _id: promptGetOne.owner });
+        promptGetOne.username = userGetOne.username;
+        res.send(promptGetOne);
+      } catch {
+        console.log("cannot find owner of prompt");
+        res.status(500).send("error when finding prompt, db error");
+      }
     } else {
       //_id was of the correct format but no prompt was found
       res.status(404).send("prompt not found");
@@ -120,10 +128,10 @@ router.post("/", async (req, res) => {
 router.post("/withstoryline", async (req, res) => {
   try {
     //create one prompt
-    const storylineCreate = await Storyline.create({owner: req.body.owner});
-    console.log(storylineCreate)
+    const storylineCreate = await Storyline.create({ owner: req.body.owner });
+    console.log(storylineCreate);
     req.body.storyline = storylineCreate._id;
-   const promptCreate = await Prompt.create(req.body);
+    const promptCreate = await Prompt.create(req.body);
     await Storyline.updateOne(
       { _id: storylineCreate._id },
       { prompt: promptCreate._id }
