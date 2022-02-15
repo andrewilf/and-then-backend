@@ -1,7 +1,7 @@
 const express = require("express");
 require("dotenv").config();
 const Prompt = require("../models/prompt");
-const Storyline = require("..models/storyline");
+const Storyline = require("../models/storyline");
 const router = express.Router();
 
 ///GET routes==================================================================================================
