@@ -24,6 +24,7 @@ router.get("/search/:page", async (req, res) => {
     const options = {
       page: page,
       limit: 9,
+      populate: "storyline",
     };
     console.log("search for prompts with fields");
     const searchObj = [];
@@ -40,10 +41,10 @@ router.get("/search/:page", async (req, res) => {
       searchObj.push({ title: { $regex: title, $options: "i" } });
     }
     console.log(searchObj);
-    const searchPrompts = await Prompt.populate("storyline").paginate(
+    const searchPrompts = await Prompt.paginate(
       searchObj.length === 0 ? {} : { $and: searchObj },
       options
-    );
+    );//.populate("storyline")
     console.log("number: ", searchPrompts.length);
     res.send(searchPrompts);
   } catch (error) {
