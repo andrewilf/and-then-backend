@@ -1,6 +1,7 @@
 const express = require("express");
 require("dotenv").config();
 const Prompt = require("../models/prompt");
+const Storyline = require("..models/storyline");
 const router = express.Router();
 
 ///GET routes==================================================================================================
@@ -42,7 +43,7 @@ router.get("/search/:page", async (req, res) => {
     const searchPrompts = await Prompt.paginate(
       searchObj.length === 0 ? {} : { $and: searchObj },
       options
-    )//.populate("storyline");
+    ); //.populate("storyline");
     console.log("number: ", searchPrompts.length);
     res.send(searchPrompts);
   } catch (error) {
@@ -112,6 +113,23 @@ router.post("/", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(400).send("error when adding prompt, bad input");
+  }
+});
+
+router.post("/withstoryline", async (req, res) => {
+  try {
+    //create one prompt
+    const storylineCreate = await Storyline.create();
+    req.body.storyline = [storylineCreate._id];
+    const promptCreate = await Prompt.create(req.body);
+    await Storyline.updateOne(
+      { _id: storylineCreate._id },
+      { prompt: promptCreate._id }
+    );
+    res.send(promptCreate);
+  } catch (error) {
+    console.error(error);
+    res.status(400).send("error when adding prompt with storyline, bad input");
   }
 });
 

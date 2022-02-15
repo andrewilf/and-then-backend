@@ -6,7 +6,6 @@ const StorylineSchema = new Schema(
     prompt: {
       type: Schema.Types.ObjectId,
       ref: "Prompt",
-      unique: true,
     },
     storyNodes: [
       {
