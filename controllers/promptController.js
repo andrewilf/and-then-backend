@@ -40,10 +40,10 @@ router.get("/search/:page", async (req, res) => {
       searchObj.push({ title: { $regex: title, $options: "i" } });
     }
     console.log(searchObj);
-    const searchPrompts = await Prompt.paginate(
+    const searchPrompts = await Prompt.populate("storyline").paginate(
       searchObj.length === 0 ? {} : { $and: searchObj },
       options
-    ).populate("storyline");
+    );
     console.log("number: ", searchPrompts.length);
     res.send(searchPrompts);
   } catch (error) {
