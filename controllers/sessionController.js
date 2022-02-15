@@ -8,11 +8,11 @@ const jwt = require("jsonwebtoken");
 const verifyJWT = (req, res, next) => {
   const token = req.headers["x-access-token"];
   if (!token) {
-    res.status(400).send("token not found");
+    res.status(401).send("token not found");
   } else {
     jwt.verify(token, process.env.SECRET, (err, decoded) => {
       if (err) {
-        res.send("failed to authenticate");
+        res.status(401).send("failed to authenticate");
       } else {
         req.userId = decoded.id;
         next();
@@ -47,7 +47,7 @@ router.post("/", async (req, res) => {
         _id: userAccountSearch._id,
       };
       const token = jwt.sign(payload, process.env.SECRET, {
-        expiresIn: "5m",
+        expiresIn: "50m",
       });
       //const refreshToken = jwt.sign();
       //req.session.currentUser = userAccountSearch[0];
