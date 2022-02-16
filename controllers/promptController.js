@@ -4,7 +4,6 @@ const Prompt = require("../models/prompt");
 const User = require("../models/user");
 const Storyline = require("../models/storyline");
 const router = express.Router();
-
 ///GET routes==================================================================================================
 
 router.get("/all", async (req, res) => {
@@ -62,7 +61,7 @@ router.get("/:promptID", async (req, res) => {
     const promptGetOne = await Prompt.findOne({ _id: promptID }).populate(
       "storyline"
     );
-    console.log(promptGetOne)
+    console.log(promptGetOne);
     if (promptGetOne !== null) {
       try {
         const userGetOne = await User.findOne({ _id: promptGetOne.owner });
@@ -155,6 +154,10 @@ router.post("/withstoryline", async (req, res) => {
       { _id: storylineCreate._id },
       { prompt: promptCreate._id }
     );
+    await User.updateOne(
+      { _id: promptCreate.owner },
+      { $push: { ownedPrompts: promptCreate._id } }
+    );
     res.send(promptCreate);
   } catch (error) {
     console.error(error);
@@ -223,6 +226,32 @@ router.delete("/all", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(400).send("error when deleting prompts, bad input");
+  }
+});
+
+router.delete("/withstoryline", async (req, res) => {
+  try {
+    //delete one prompt with storyline and all associated nodes
+    await Node.deleteMany({
+      _id: { $in: req.body.storyline[0].storyNodes },
+    });
+    await Node.deleteMany({
+      _id: { $in: req.body.storyline[0].proposedNodes },
+    });
+    await Storyline.deleteOne({
+      _id: req.body.storyline[0]._id,
+    });
+    const promptDelete = await Prompt.deleteOne({ _id: req.body._id });
+    await User.updateOne(
+      { _id: req.body.owner },
+      { $pull: { ownedPrompts: req.body._id } }
+    );
+    res.send(promptDelete);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(400)
+      .send("error when deleting prompt with storyline, bad input");
   }
 });
 
