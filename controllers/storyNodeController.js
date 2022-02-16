@@ -1,6 +1,9 @@
 const express = require("express");
 require("dotenv").config();
 const StoryNode = require("../models/storyNode");
+const Prompt = require("../models/prompt");
+const User = require("../models/user");
+const Storyline = require("../models/storyline");
 const router = express.Router();
 
 ///GET routes==================================================================================================
@@ -97,6 +100,21 @@ router.post("/", async (req, res) => {
   try {
     //create one node
     const nodeCreate = await StoryNode.create(req.body);
+    res.send(nodeCreate);
+  } catch (error) {
+    console.error(error);
+    res.status(400).send("error when adding story node, bad input");
+  }
+});
+
+router.post("/addtostoryline", async (req, res) => {
+  try {
+    //create one node
+    const nodeCreate = await StoryNode.create(req.body);
+    await Storyline.updateOne(
+      { _id: req.body.storyline },
+      { $push: { proposedNodes: nodeCreate._id } }
+    );
     res.send(nodeCreate);
   } catch (error) {
     console.error(error);
