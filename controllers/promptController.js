@@ -1,7 +1,7 @@
 const express = require("express");
 require("dotenv").config();
 const Prompt = require("../models/prompt");
-const User = require("../models/user")
+const User = require("../models/user");
 const Storyline = require("../models/storyline");
 const router = express.Router();
 
@@ -59,13 +59,29 @@ router.get("/:promptID", async (req, res) => {
   try {
     const promptID = req.params.promptID;
     console.log("search for prompt by _id");
-    const promptGetOne = await Prompt.findOne({ _id: promptID }).populate("storyline");
+    const promptGetOne = await Prompt.findOne({ _id: promptID }).populate(
+      "storyline"
+    );
     if (promptGetOne !== null) {
       try {
         const userGetOne = await User.findOne({ _id: promptGetOne.owner });
-        const getNodes = await User.findOne({ _id: promptGetOne.owner });
-        const payload = {promptGetOne}
-        payload.username = userGetOne.username;
+        // const getNodes = await User.findOne({ _id: promptGetOne.owner });
+        const payload = {
+          additionalInfo: promptGetOne.additionalInfo,
+          bannerURL: promptGetOne.bannerURL,
+          createdAt: promptGetOne.createdAt,
+          followers: promptGetOne.followers,
+          genre: promptGetOne.genre,
+          owner: userGetOne.username,
+          promptText: userGetOne.promptText,
+          rating: userGetOne.rating,
+          status: userGetOne.status,
+          storyline: userGetOne.storyline,
+          title: userGetOne.title,
+          updatedAt: userGetOne.updatedAt,
+          _id: userGetOne._id,
+        };
+        //payload.username = userGetOne.username;
         res.send(payload);
       } catch {
         console.log("cannot find owner of prompt");
