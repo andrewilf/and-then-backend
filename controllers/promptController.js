@@ -62,6 +62,7 @@ router.get("/:promptID", async (req, res) => {
     const promptGetOne = await Prompt.findOne({ _id: promptID }).populate(
       "storyline"
     );
+    console.log(promptGetOne)
     if (promptGetOne !== null) {
       try {
         const userGetOne = await User.findOne({ _id: promptGetOne.owner });
@@ -72,14 +73,15 @@ router.get("/:promptID", async (req, res) => {
           createdAt: promptGetOne.createdAt,
           followers: promptGetOne.followers,
           genre: promptGetOne.genre,
-          owner: userGetOne.username,
-          promptText: userGetOne.promptText,
-          rating: userGetOne.rating,
-          status: userGetOne.status,
-          storyline: userGetOne.storyline,
-          title: userGetOne.title,
-          updatedAt: userGetOne.updatedAt,
-          _id: userGetOne._id,
+          owner: promptGetOne.owner,
+          username: userGetOne.username,
+          promptText: promptGetOne.promptText,
+          rating: promptGetOne.rating,
+          status: promptGetOne.status,
+          storyline: promptGetOne.storyline,
+          title: promptGetOne.title,
+          updatedAt: promptGetOne.updatedAt,
+          _id: promptGetOne._id,
         };
         //payload.username = userGetOne.username;
         res.send(payload);
