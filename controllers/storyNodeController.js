@@ -148,7 +148,7 @@ router.post("/addtostoryline/:nodeID", async (req, res) => {
     await Storyline.deleteMany({
       _id: { $in: DeleteNodeIDs },
     });
-    res.send("added successfully to storyline");
+    res.send(storylineToContinue);
   } catch (error) {
     console.error(error);
     res.status(400).send("error when adding story node, bad input");
