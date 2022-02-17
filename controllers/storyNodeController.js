@@ -108,15 +108,32 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.post("/addtostoryline", async (req, res) => {
+router.post("/addtostoryline/:nodeID", async (req, res) => {
   try {
-    //create one node
-    const nodeCreate = await StoryNode.create(req.body);
+    const nodeID = req.params.nodeID;
+    //move one proposed node to storyline, delete all proposed from storyline and db
+
+    //add node to storyline storynode
     await Storyline.updateOne(
       { _id: req.body.storyline },
-      { $push: { proposedNodes: nodeCreate._id } }
+      { $push: { storyNodes: nodeID } }
     );
-    res.send(nodeCreate);
+
+    const storylineToContinue = await Storyline.findOne({
+      _id: req.body.storyline,
+    });
+    const DeleteNodeIDs = storylineToContinue.proposedNodes;
+    DeleteNodeIDs.pop(nodeID);
+    //clear proposed nodes from storyline
+    await Storyline.updateOne(
+      { _id: req.body.storyline },
+      { $pull: { proposedNodes: { $in: DeleteNodeIDs } } }
+    );
+    //delete all other proposed nodes
+    await Storyline.deleteMany({
+      _id: { $in: DeleteNodeIDs },
+    });
+    res.send("added successfully to storyline");
   } catch (error) {
     console.error(error);
     res.status(400).send("error when adding story node, bad input");
