@@ -213,6 +213,51 @@ router.put("/:promptID", async (req, res) => {
   }
 });
 
+router.put("/follow/:promptID", async (req, res) => {
+  //toggle follow status
+  console.log("updating one prompt, find via _id");
+
+  try {
+    const filterID = { _id: req.params.promptID };
+    const followStatus = req.body.followStatus;
+    const userID = req.body.userID;
+
+    if (followStatus) {
+      const promptUpdate = await Prompt.updateOne(
+        { _id: filterID },
+        {
+          $push: { followers: userID },
+        }
+      );
+      const userUpdate = await User.updateOne(
+        { _id: userID },
+        {
+          $push: { followedPrompts: filterID },
+        }
+      );
+      res.send(promptUpdate);
+    } else {
+      const promptUpdate = await Prompt.updateOne(
+        { _id: filterID },
+        {
+          $pull: { followers: userID },
+        }
+      );
+      const userUpdate = await User.updateOne(
+        { _id: userID },
+        {
+          $pull: { followedPrompts: filterID },
+        }
+      );
+      res.send(promptUpdate);
+    }
+  } catch (error) {
+    console.error(error);
+    //likely the promptID was not a string of 12 bytes or a string of 24 hex characters
+    res.status(400).send("error when updating follow status, bad input");
+  }
+});
+
 //DELETE routes===============================================================================================
 
 router.delete("/all", async (req, res) => {
@@ -236,6 +281,18 @@ router.delete("/withstoryline", async (req, res) => {
     await Node.deleteMany({
       _id: { $in: req.body.storyline[0].storyNodes },
     });
+    await User.updateMany(
+      {},
+      {
+        $pull: { ownedPrompts: req.body._id },
+      }
+    );
+    await User.updateMany(
+      {},
+      {
+        $pull: { followedPrompts: req.body._id },
+      }
+    );
     await Node.deleteMany({
       _id: { $in: req.body.storyline[0].proposedNodes },
     });
