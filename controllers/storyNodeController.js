@@ -142,7 +142,7 @@ router.post("/addtostoryline/:nodeID", async (req, res) => {
     //clear proposed nodes from storyline
     await Storyline.updateOne(
       { _id: req.body.storyline },
-      { $pull: { proposedNodes: { $in: storylineToContinue.proposedNodes } } }
+      { proposedNodes: [] }
     );
     //delete all other proposed nodes
     await Storyline.deleteMany({
