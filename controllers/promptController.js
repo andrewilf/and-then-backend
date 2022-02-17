@@ -14,6 +14,84 @@ router.get("/all", async (req, res) => {
   res.send(promptAll);
 });
 
+router.get("/recentcreated", async (req, res) => {
+  //get recently added prompts
+  try {
+    const promptsGet = await Prompt.find({}).sort({ createdAt: -1 }).limit(5);
+    if (promptsGet.length !== 0) {
+      //return valid response, should be an array of objects
+      res.send(promptsGet);
+    } else {
+      //prompt field exists but no prompt was found
+      res.status(404).send(`no prompts were found`);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("error when finding prompts");
+  }
+});
+
+router.get("/recentupdated", async (req, res) => {
+  //get recently added prompts
+  try {
+    const promptsGet = await Prompt.find({}).sort({ updatedAt: -1 }).limit(5);
+    if (promptsGet.length !== 0) {
+      //return valid response, should be an array of objects
+      res.send(promptsGet);
+    } else {
+      //prompt field exists but no prompt was found
+      res.status(404).send(`no prompts were found`);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("error when finding prompts");
+  }
+});
+
+router.get("/random", async (req, res) => {
+  //get a random added prompts
+  try {
+    Prompt.count().exec(function (err, count) {
+      // Get a random entry
+      const random = Math.floor(Math.random() * count);
+
+      // Again query all users but only fetch one offset by our random #
+      Prompt.findOne()
+        .skip(random)
+        .exec(function (err, result) {
+          console.log(result);
+          //send _id of random prompt
+          res.send(result._id);
+        });
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("error when finding prompts");
+  }
+});
+
+router.get("/multi/:promptArrayIDs", async (req, res) => {
+  //searc for multiple prompts by _id
+  try {
+    const promptArrayIDs = req.params.promptArrayIDs.split(",");
+    console.log("search for multiple prompts by _id");
+    const promptGetMany = await Prompt.find({
+      _id: { $in: promptArrayIDs },
+    });
+    if (promptGetMany !== null) {
+      //console.log(nodeGetMany)
+      res.send(promptGetMany);
+    } else {
+      //_id was of the correct format but no node was found
+      res.status(404).send("prompts not found");
+    }
+  } catch (error) {
+    //likely the promptID was not a string of 12 bytes or a string of 24 hex characters
+    console.error(error);
+    res.status(400).send("error when finding prompts, bad input");
+  }
+});
+
 router.get("/search/:page", async (req, res) => {
   //search for prompt by search fields
   try {
