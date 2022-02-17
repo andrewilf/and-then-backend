@@ -108,6 +108,21 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.post("/proposenode", async (req, res) => {
+  try {
+    //move one node
+    const nodeCreate = await StoryNode.create(req.body);
+    await Storyline.updateOne(
+      { _id: req.body.storyline },
+      { $push: { proposedNodes: nodeCreate._id } }
+    );
+    res.send(nodeCreate);
+  } catch (error) {
+    console.error(error);
+    res.status(400).send("error when adding story node, bad input");
+  }
+});
+
 router.post("/addtostoryline/:nodeID", async (req, res) => {
   try {
     const nodeID = req.params.nodeID;
