@@ -29,6 +29,7 @@ router.get("/multi/:nodeArrayIDs", async (req, res) => {
         _id: element._id,
         text: element.text,
         author: element.author.username,
+        authorID: element.author._id,
         updatedAt: element.updatedAt,
       }));
       res.send(payload);
