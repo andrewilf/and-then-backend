@@ -3,6 +3,7 @@ require("dotenv").config();
 const Prompt = require("../models/prompt");
 const User = require("../models/user");
 const Storyline = require("../models/storyline");
+const Node = require("../models/storyNode");
 const router = express.Router();
 ///GET routes==================================================================================================
 

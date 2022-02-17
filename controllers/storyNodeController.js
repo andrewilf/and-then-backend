@@ -202,4 +202,27 @@ router.delete("/:nodeID", async (req, res) => {
   }
 });
 
+router.delete("/removeproposed/:nodeID", async (req, res) => {
+  //delete one story node by _id
+
+  try {
+    const nodeID = req.params.nodeID;
+    const nodeDelete = await StoryNode.deleteOne({ _id: nodeID });
+    if (nodeDelete.deletedCount !== 0) {
+      await Storyline.updateOne(
+        { _id: req.body.storyline },
+        { $pull: { proposedNodes: nodeID } }
+      );
+      res.send(nodeDelete);
+    } else {
+      res
+        .status(404)
+        .send("No story nodes were found with that id, deletedCount: 0");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(400).send("error when deleting story node, bad input");
+  }
+});
+
 module.exports = router;
