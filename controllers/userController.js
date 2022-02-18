@@ -61,14 +61,14 @@ router.get("/:searchField/:searchValue", async (req, res) => {
       res.send(usersGet);
     } else if (!checkFieldExists) {
       //searchField is not valid
-      res.status(400).send(`"${searchField}" is not a valid field`);
+      res.status(400).send({ error: `"${searchField}" is not a valid field` });
     } else {
       //user field exists but no user was found
       res
         .status(404)
-        .send(
-          `no users were found with the parameter ${searchField}: ${searchValue}`
-        );
+        .send({
+          error: `no users were found with the parameter ${searchField}: ${searchValue}`,
+        });
     }
   } catch (error) {
     console.error(error);

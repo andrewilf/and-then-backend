@@ -104,6 +104,7 @@ router.get("/search/:page", async (req, res) => {
       page: page,
       limit: 9,
       populate: "storyline",
+      sort: { updatedAt: -1}
     };
     console.log("search for prompts with fields");
     const searchObj = [];
