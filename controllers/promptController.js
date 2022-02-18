@@ -302,6 +302,7 @@ router.put("/follow/:promptID", async (req, res) => {
     const userID = req.body.userID;
     console.log(followStatus)
     if (followStatus == "true") {
+      console.log("following")
       const promptUpdate = await Prompt.updateOne(
         { _id: filterID },
         {
@@ -316,6 +317,7 @@ router.put("/follow/:promptID", async (req, res) => {
       );
       res.send({promptUpdate, userUpdate});
     } else {
+      console.log("unfollowing")
       const promptUpdate = await Prompt.updateOne(
         { _id: filterID },
         {
