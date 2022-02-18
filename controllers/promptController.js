@@ -17,7 +17,10 @@ router.get("/all", async (req, res) => {
 router.get("/recentcreated", async (req, res) => {
   //get recently added prompts
   try {
-    const promptsGet = await Prompt.find({}).sort({ createdAt: -1 }).limit(5);
+    const promptsGet = await Prompt.find({})
+      .populate("storyline")
+      .sort({ createdAt: -1 })
+      .limit(5);
     if (promptsGet.length !== 0) {
       //return valid response, should be an array of objects
       res.send(promptsGet);
@@ -34,7 +37,10 @@ router.get("/recentcreated", async (req, res) => {
 router.get("/recentupdated", async (req, res) => {
   //get recently added prompts
   try {
-    const promptsGet = await Prompt.find({}).sort({ updatedAt: -1 }).limit(5);
+    const promptsGet = await Prompt.find({})
+      .populate("storyline")
+      .sort({ updatedAt: -1 })
+      .limit(5);
     if (promptsGet.length !== 0) {
       //return valid response, should be an array of objects
       res.send(promptsGet);
@@ -77,7 +83,7 @@ router.get("/multi/:promptArrayIDs", async (req, res) => {
     console.log("search for multiple prompts by _id");
     const promptGetMany = await Prompt.find({
       _id: { $in: promptArrayIDs },
-    });
+    }).populate("storyline");
     if (promptGetMany !== null) {
       //console.log(nodeGetMany)
       res.send(promptGetMany);
