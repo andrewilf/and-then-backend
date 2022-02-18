@@ -45,6 +45,7 @@ router.get("/:userID", async (req, res) => {
   }
 });
 
+
 router.get("/:searchField/:searchValue", async (req, res) => {
   //search multiple users by defined field
   try {

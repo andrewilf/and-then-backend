@@ -104,7 +104,7 @@ router.get("/search/:page", async (req, res) => {
       page: page,
       limit: 9,
       populate: "storyline",
-      sort: { updatedAt: -1}
+      sort: { updatedAt: -1 },
     };
     console.log("search for prompts with fields");
     const searchObj = [];
@@ -300,9 +300,9 @@ router.put("/follow/:promptID", async (req, res) => {
     const filterID = { _id: req.params.promptID };
     const followStatus = req.body.followStatus;
     const userID = req.body.userID;
-    console.log(followStatus)
-    if (followStatus == "true") {
-      console.log("following")
+    console.log(followStatus);
+    if (followStatus == true) {
+      console.log("following");
       const promptUpdate = await Prompt.updateOne(
         { _id: filterID },
         {
@@ -315,9 +315,9 @@ router.put("/follow/:promptID", async (req, res) => {
           $push: { followedPrompts: filterID },
         }
       );
-      res.send({promptUpdate, userUpdate});
+      res.send({ promptUpdate, userUpdate });
     } else {
-      console.log("unfollowing")
+      console.log("unfollowing");
       const promptUpdate = await Prompt.updateOne(
         { _id: filterID },
         {
@@ -327,10 +327,10 @@ router.put("/follow/:promptID", async (req, res) => {
       const userUpdate = await User.updateOne(
         { _id: userID },
         {
-          $pull: { followedPrompts: filterID },
+          $pull: { followedPrompts: { $in: [filterID] } },
         }
       );
-      res.send({promptUpdate, userUpdate});
+      res.send({ promptUpdate, userUpdate });
     }
   } catch (error) {
     console.error(error);
