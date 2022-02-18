@@ -54,6 +54,27 @@ router.get("/recentupdated", async (req, res) => {
   }
 });
 
+router.get("/followed/:userID", async (req, res) => {
+  //get recently added prompts
+  const userID = req.params.userID;
+  try {
+    const userInfo = await User.findOne({ _id: userID }).populate({
+      path: "followedPrompts",
+      populate: { path: "storyline" },
+    });
+    if (userInfo.length !== 0) {
+      //return valid response, should be an array of objects
+      res.send(userInfo.followedPrompts);
+    } else {
+      //prompt field exists but no prompt was found
+      res.status(404).send(`no prompts were found`);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("error when finding prompts");
+  }
+});
+
 router.get("/random", async (req, res) => {
   //get a random added prompts
   try {
