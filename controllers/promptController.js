@@ -300,7 +300,7 @@ router.put("/follow/:promptID", async (req, res) => {
     const filterID = { _id: req.params.promptID };
     const followStatus = req.body.followStatus;
     const userID = req.body.userID;
-
+    console.log(followStatus)
     if (followStatus) {
       const promptUpdate = await Prompt.updateOne(
         { _id: filterID },
@@ -314,7 +314,7 @@ router.put("/follow/:promptID", async (req, res) => {
           $push: { followedPrompts: filterID },
         }
       );
-      res.send(promptUpdate);
+      res.send({promptUpdate, userUpdate});
     } else {
       const promptUpdate = await Prompt.updateOne(
         { _id: filterID },
@@ -328,7 +328,7 @@ router.put("/follow/:promptID", async (req, res) => {
           $pull: { followedPrompts: filterID },
         }
       );
-      res.send(promptUpdate);
+      res.send({promptUpdate, userUpdate});
     }
   } catch (error) {
     console.error(error);
