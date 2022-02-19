@@ -4,8 +4,18 @@ const Prompt = require("../models/prompt");
 const User = require("../models/user");
 const Storyline = require("../models/storyline");
 const Node = require("../models/storyNode");
+const Trending = require("../models/trending");
 const router = express.Router();
 ///GET routes==================================================================================================
+
+setInterval(async () => {
+  console.log("decrementing trending now!");
+  const deductScore = await Trending.updateMany(
+    { trendScore: { $gte: 0 } },
+    { $inc: { trendScore: -1 } }
+  );
+  console.log(deductScore);
+}, 3600000);
 
 router.get("/all", async (req, res) => {
   console.log("get all prompts");
@@ -173,6 +183,10 @@ router.get("/:promptID", async (req, res) => {
       try {
         const userGetOne = await User.findOne({ _id: promptGetOne.owner });
         // const getNodes = await User.findOne({ _id: promptGetOne.owner });
+        await Trending.updateOne(
+          { promptID: promptID },
+          { $inc: { trendScore: 2 } }
+        );
         const payload = {
           additionalInfo: promptGetOne.additionalInfo,
           bannerURL: promptGetOne.bannerURL,
@@ -257,6 +271,7 @@ router.post("/withstoryline", async (req, res) => {
     console.log(storylineCreate);
     req.body.storyline = storylineCreate._id;
     const promptCreate = await Prompt.create(req.body);
+    await Trending.create({ promptID: promptCreate._id, trendScore: 3 });
     await Storyline.updateOne(
       { _id: storylineCreate._id },
       { prompt: promptCreate._id }
@@ -412,6 +427,7 @@ router.delete("/withstoryline", async (req, res) => {
       { _id: req.body.owner },
       { $pull: { ownedPrompts: req.body._id } }
     );
+    await Trending.deleteOne({ promptID: promptID });
     res.send(promptDelete);
   } catch (error) {
     console.error(error);
