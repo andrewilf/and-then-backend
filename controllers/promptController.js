@@ -24,6 +24,13 @@ router.get("/all", async (req, res) => {
   res.send(promptAll);
 });
 
+router.get("/alltrends", async (req, res) => {
+  console.log("get all trends");
+  const trendAll = await Trending.find({});
+  //returns all prompt, should be an array of objects
+  res.send(trendAll);
+});
+
 router.get("/recentcreated", async (req, res) => {
   //get recently added prompts
   try {
