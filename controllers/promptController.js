@@ -15,7 +15,7 @@ setInterval(async () => {
     { $inc: { trendScore: -1 } }
   );
   console.log(deductScore);
-}, 3600000);
+}, 600000);
 
 router.get("/all", async (req, res) => {
   console.log("get all prompts");
@@ -192,7 +192,7 @@ router.get("/:promptID", async (req, res) => {
         // const getNodes = await User.findOne({ _id: promptGetOne.owner });
         await Trending.updateOne(
           { promptID: promptID },
-          { $inc: { trendScore: 2 } }
+          { $inc: { trendScore: 1 } }
         );
         const payload = {
           additionalInfo: promptGetOne.additionalInfo,
