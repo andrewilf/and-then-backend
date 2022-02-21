@@ -15,7 +15,7 @@ setInterval(async () => {
     { $inc: { trendScore: -1 } }
   );
   console.log(deductScore);
-}, 600000);
+}, 500000);
 
 router.get("/all", async (req, res) => {
   console.log("get all prompts");
@@ -29,6 +29,22 @@ router.get("/alltrends", async (req, res) => {
   const trendAll = await Trending.find({});
   //returns all prompt, should be an array of objects
   res.send(trendAll);
+});
+
+router.get("/trending", async (req, res) => {
+  //get trending prompts
+  try {
+    const trendingIDs = await Trending.find({})
+      // .populate("storyline")
+      .sort({ trendScore: -1 })
+      .limit(3);
+    const PromptIDs = trendingIDs.map((element) => element.promptID);
+    const Prompts = await Prompt.find({ _id: PromptIDs }).populate("storyline");
+    res.send(Prompts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("error when finding prompts");
+  }
 });
 
 router.get("/recentcreated", async (req, res) => {
