@@ -30,7 +30,9 @@ router.get("/check", verifyJWT, async (req, res) => {
 router.get("/login", verifyJWT, async (req, res) => {
   const token = req.headers["x-access-token"];
   const decoded = jwt.decode(token);
-  res.send(decoded);
+  const user = await User.findOne({ _id: decoded._id });
+  const payload = { ...decoded, username: user.username };
+  res.send(payload);
 });
 
 //POST routes=================================================================================================
