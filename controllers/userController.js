@@ -65,7 +65,7 @@ router.get("/profile/:userID", async (req, res) => {
           _id: { $in: userGetOne.ownedPrompts },
         })//.populate("storyline");
         payload.ownedPrompts = PromptsOwned
-        for (prompt of PromptsOwned) {
+        for (const prompt of PromptsOwned) {
           if (!genreCheck[prompt.genre]) {
             genreCheck[prompt.genre] = 1;
           } else {
@@ -78,7 +78,7 @@ router.get("/profile/:userID", async (req, res) => {
           _id: { $in: userGetOne.followedPrompts },
         })//.populate("storyline");
         payload.followedPrompts = PromptsFollowed
-        for (prompt of PromptsFollowed) {
+        for (const prompt of PromptsFollowed) {
           if (!genreCheck[prompt.genre]) {
             genreCheck[prompt.genre] = 1;
           } else {
