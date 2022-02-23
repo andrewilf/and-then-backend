@@ -62,7 +62,7 @@ router.get("/profile/:userID", async (req, res) => {
       //check favourite genre
       if (userGetOne.ownedPrompts.length !== 0) {
         const PromptsOwned = await Prompt.find({
-          $in: { _id: userGetOne.ownedPrompts },
+          _id: { $in: userGetOne.ownedPrompts },
         })//.populate("storyline");
         payload.ownedPrompts = PromptsOwned
         for (prompt of PromptsOwned) {
@@ -75,7 +75,7 @@ router.get("/profile/:userID", async (req, res) => {
       }
       if (userGetOne.followedPrompts.length !== 0) {
         const PromptsFollowed = await Prompt.find({
-          $in: { _id: userGetOne.followedPrompts },
+          _id: { $in: userGetOne.followedPrompts },
         })//.populate("storyline");
         payload.followedPrompts = PromptsFollowed
         for (prompt of PromptsFollowed) {
@@ -95,6 +95,7 @@ router.get("/profile/:userID", async (req, res) => {
 
       payload.favouriteGenre = favouriteGenre;
       // console.log(genreCheck);
+      console.log(payload.ownedPrompts.length, payload.followedPrompts.length)
       res.send(payload);
     } else {
       //_id was of the correct format but no user was found
