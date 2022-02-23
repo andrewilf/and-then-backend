@@ -3,7 +3,7 @@ require("dotenv").config();
 const User = require("../models/user");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
-
+const Prompt = require("../models/prompt");
 ///GET routes==================================================================================================
 
 router.get("/all/:pageNumber", async (req, res) => {
@@ -45,6 +45,67 @@ router.get("/:userID", async (req, res) => {
   }
 });
 
+router.get("/profile/:userID", async (req, res) => {
+  //searc for one user by _id
+  try {
+    const userID = req.params.userID;
+    console.log("get profile details");
+    const userGetOne = await User.findOne({ _id: userID });
+    const payload = {
+      ownedPrompts: [],
+      followedPrompts: [],
+    };
+    console.log(userGetOne);
+    if (userGetOne !== null) {
+      //returns one object
+      const genreCheck = {};
+      //check favourite genre
+      if (userGetOne.ownedPrompts.length !== 0) {
+        const PromptsOwned = await Prompt.find({
+          $in: { _id: userGetOne.ownedPrompts },
+        })//.populate("storyline");
+        payload.ownedPrompts = PromptsOwned
+        for (prompt of PromptsOwned) {
+          if (!genreCheck[prompt.genre]) {
+            genreCheck[prompt.genre] = 1;
+          } else {
+            genreCheck[prompt.genre] += 1;
+          }
+        }
+      }
+      if (userGetOne.followedPrompts.length !== 0) {
+        const PromptsFollowed = await Prompt.find({
+          $in: { _id: userGetOne.followedPrompts },
+        })//.populate("storyline");
+        payload.followedPrompts = PromptsFollowed
+        for (prompt of PromptsFollowed) {
+          if (!genreCheck[prompt.genre]) {
+            genreCheck[prompt.genre] = 1;
+          } else {
+            genreCheck[prompt.genre] += 1;
+          }
+        }
+      }
+      const favouriteGenre =
+        Object.keys(genreCheck).length !== 0
+          ? Object.keys(genreCheck).reduce((a, b) =>
+              genreCheck[a] > genreCheck[b] ? a : b
+            )
+          : "None";
+
+      payload.favouriteGenre = favouriteGenre;
+      // console.log(genreCheck);
+      res.send(payload);
+    } else {
+      //_id was of the correct format but no user was found
+      res.status(404).send("user not found");
+    }
+  } catch (error) {
+    //likely the userID was not a string of 12 bytes or a string of 24 hex characters
+    console.error(error);
+    res.status(400).send("error when finding user, bad input");
+  }
+});
 
 router.get("/:searchField/:searchValue", async (req, res) => {
   //search multiple users by defined field
@@ -65,11 +126,9 @@ router.get("/:searchField/:searchValue", async (req, res) => {
       res.status(400).send({ error: `"${searchField}" is not a valid field` });
     } else {
       //user field exists but no user was found
-      res
-        .status(404)
-        .send({
-          error: `no users were found with the parameter ${searchField}: ${searchValue}`,
-        });
+      res.status(404).send({
+        error: `no users were found with the parameter ${searchField}: ${searchValue}`,
+      });
     }
   } catch (error) {
     console.error(error);
