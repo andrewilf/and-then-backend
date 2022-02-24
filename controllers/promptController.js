@@ -450,7 +450,7 @@ router.delete("/withstoryline", async (req, res) => {
       { _id: req.body.owner },
       { $pull: { ownedPrompts: req.body._id } }
     );
-    await Trending.deleteOne({ promptID: promptID });
+    await Trending.deleteOne({ promptID: req.body._id });
     res.send(promptDelete);
   } catch (error) {
     console.error(error);
