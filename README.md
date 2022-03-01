@@ -8,7 +8,7 @@ To read more about the full application, navigate to the frontend repo linked be
 This Backend application was created to manage the logic for the application: And Then. The application is a proof of concept collaborative writing app.
 For more details on the general project, view the readme file on frontend's github repo: https://github.com/andrewilf/and-then
 
-## Features
+# Features
 
 - Express server to serve API calls for the frontend application.
 - Communication with a MongoDB database through Mongoose.
@@ -20,6 +20,7 @@ For more details on the general project, view the readme file on frontend's gith
   - Most recently added prompts
   - Most recently updated prompts (unused in the final application)
   - A random prompt
+  - Personal user infographics such as favourite genre, total followers for owned prompts, owned prompts list, and followed promtps list
   - Top 3 trending prompts
 - A specialised endpoint was also created for browsing the prompt catalog.
   - The search can be refined by: Genre, Status, Rating, and match by string in name
@@ -27,12 +28,25 @@ For more details on the general project, view the readme file on frontend's gith
 
 ## Technologies
 
-- CORS
 - Bcryptjs
 - Mongoose/MongoDB
 - Mongoose Paginate V2
 - Json Web Token
 - Node.js
+
+# Deeper Explaination on certain features
+
+## Trending prompts
+
+When a new prompt is created, a seperate "Trending" object is also created in the database. This object has 2 parameters: The corresponding prompt ID and the trending score. A newly made Trending object starts with a trending score of 3. Every time the full prompt is loaded in by an API call, this trending score is incremented by 1.
+To ensure the prompt is considered "trending", the server also does a decrement of all prompt score by 1 every 5 minutes.
+
+# To-do list
+
+- Add a JWT refresh token mechanism. Currently the login JWT expires in 50 minutes.
+- Add checks to the more important endpoint CRUD features.
+- More robust trending prompt calculations.
+- Potentially expand the ability to add more storylines and branch them. Needs more thought from the user POV first.
 
 ## Running the server locally
 
