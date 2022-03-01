@@ -1,0 +1,7 @@
+PORT=4000
+DATABASE=<Insert DB name>
+MONGO_USER=<Insert Mongo username>
+MONGO_PASSWORD=<Insert Mongo password>
+MONGO_BASE_URL=<Insert Mongo URL>
+CORS_WHITELIST=<Insert whitelisted URLS>
+SECRET=<Insert secret string for JWT>

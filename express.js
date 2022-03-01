@@ -3,7 +3,6 @@ require("dotenv").config();
 const cors = require("cors");
 const app = express();
 const mongoose = require("mongoose");
-//const session = require("express-session");
 const CORS_WHITELIST = process.env.CORS_WHITELIST.split(",");
 const db = mongoose.connection;
 const PORT = process.env.PORT;
@@ -20,26 +19,16 @@ app.use(
   //{origin: CORS_WHITELIST,}
 );
 
-// app.use(
-//   session({
-//     secret: process.env.SECRET, //a random string do not copy this value or your stuff will get hacked
-//     resave: false, // default more info: https://www.npmjs.com/package/express-session#resave
-//     saveUninitialized: false, // default  more info: https://www.npmjs.com/package/express-session#resave
-//   })
-// );
-
 //--------------------------------------------controllers--------------------------------------------
 
 
 const userController = require("./controllers/userController");
-// const bannerController = require("./controllers/bannerImageController");
 const sessionController = require("./controllers/sessionController");
 const promptController = require("./controllers/promptController");
 const storylineController = require("./controllers/storylineController");
 const storyNodeController = require("./controllers/storyNodeController");
 
 app.use("/user", userController);
-// app.use("/banner", bannerController);
 app.use("/session", sessionController);
 app.use("/prompt", promptController);
 app.use("/storyline", storylineController);
