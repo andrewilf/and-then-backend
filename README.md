@@ -53,7 +53,7 @@ The return payload of the user profile page has 3 parameters: followed prompts, 
 
 This endpoint is the most complicated. It has 5 possible fields to filter by, 3 of those fields are arrays.
 
-![search fields](https://github.com/andrewilf/and-then-backend/blob/main/readme_img/Search fields image.png?raw=true)
+![search fields](https://github.com/andrewilf/and-then-backend/blob/main/readme_img/Search%20fields%20image.png?raw=true)
 
 As shown in the example above, the fields are:
 
@@ -88,7 +88,3 @@ If you wish to clone and run this server on your local machine:
 ## Links
 
 [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/andrewianfaulkner/)
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
